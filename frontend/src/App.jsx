@@ -5,11 +5,9 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
-
   fetch("http://localhost:5000/health")
   .then(res => res.json())
   .then(data => console.log(data));
-
 
   return (
      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
