@@ -1,0 +1,24 @@
+ 
+ export default function Navbar(){
+
+ 
+ return(
+ <nav className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <span className="text-xl font-semibold tracking-wide text-blue-700">
+            JOURNAL
+          </span>
+
+          <div className="flex gap-8 text-slate-600 font-medium">
+            {["Running Trades", "Trade History"].map((item) => (
+              <button
+                key={item}
+                className="relative transition-all duration-200 hover:-translate-y-0.5 hover:text-blue-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all hover:after:w-full"
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+      </nav>
+)}
