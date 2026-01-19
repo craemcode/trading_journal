@@ -1,19 +1,26 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv"
+import router from "./routes/trade_routes.js";
+
+
+
 
 const app = express();
-dotenv.config();
 
-const PORT = process.env.PORT;
 
+
+//global middleware
 app.use(cors());
 app.use(express.json());
 
+
+//health check initial
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-app.listen(PORT, () => {
-  console.log(`API running on http://localhost:${PORT}`);
-});
+//route registrations.
+app.use("/new_trade", router);
+
+
+export default app

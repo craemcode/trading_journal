@@ -7,8 +7,10 @@ db.prepare(`
     direction TEXT CHECK(direction IN ('long', 'short')) NOT NULL, 
     risk_reward REAL NOT NULL,
     risk_amount REAL,
+    entry_price REAL NOT NULL,
+    exit_price REAL
     pnl REAL,
-    outcome TEXT CHECK(outcome IN ('win', 'lose')) NOT NULL,
+    outcome TEXT CHECK(outcome IN ('win', 'open', 'lose')) NOT NULL,
     entry_time TEXT NOT NULL,
     exit_time TEXT,
     strategy TEXT,
