@@ -1,4 +1,5 @@
 import { useState } from "react";
+import StatusMessage from "./StatusMessage";
 
 export default function TradeEntryForm() {
   const [direction, setDirection] = useState("long");
@@ -6,6 +7,7 @@ export default function TradeEntryForm() {
     instrument: "",
     risk_reward: "",
     risk_amount: "",
+    entry_price: "",
     strategy: "",
     pre_notes: "",
   });
@@ -73,6 +75,7 @@ export default function TradeEntryForm() {
         instrument: "",
         risk_reward: "",
         risk_amount: "",
+        entry_price: "",
         strategy: "",
         pre_notes: "",
       });
@@ -93,17 +96,10 @@ export default function TradeEntryForm() {
         New Trade
       </h2>
 
-        {status && (
-        <div
-          className={`mb-4 rounded-lg px-4 py-2 text-sm font-medium ${
-            status.type === "success"
-              ? "bg-emerald-100 text-emerald-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {status.msg}
-        </div>
-      )}
+       <StatusMessage 
+                status={status}
+                onClose={()=> setStatus(null)}
+        />
 
 
 
