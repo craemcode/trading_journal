@@ -14,7 +14,8 @@ export default function CloseTradeModal({ trade, onClose, onSuccess }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           exit_price: Number(exitPrice),
-          pnl: Number(pnl)
+          pnl: Number(pnl),
+          post_notes: postNotes
         })
       }
     );
@@ -27,14 +28,22 @@ export default function CloseTradeModal({ trade, onClose, onSuccess }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="w-full max-w-md rounded-lg bg-white p-6">
-        <h2 className="mb-4 text-lg font-semibold text-blue-900">
-          Close Trade – {trade.instrument} - 
-            <span 
-            className={` capitalize text-sm mx-2 px-2 py-1 rounded-full ${
-                        trade.direction === "long" ? "bg-green-200 text-green-900"
-                                                    : "bg-red-200 text-red-900" }`}
-            >{trade.direction}</span>
-        </h2>
+              <h2 className="mb-4 flex justify-between text-lg font-semibold text-blue-900">
+                  <div>
+                      Close Trade : {trade.instrument} 
+                  </div>
+                  <div>
+                      <span
+                          className={` capitalize text-sm mx-2 px-2 py-1 rounded-full ${trade.direction === "long" ? "bg-green-200 text-green-900"
+                              : "bg-red-200 text-red-900"}`}
+                      >{trade.direction}</span>
+
+                      <span className="bg-gray-200 px-2 py-1 rounded-full mx-2 text-sm text-gray-900">
+                          x {trade.risk_reward}
+                      </span>
+                  </div>
+
+              </h2>
 
         <div className=" flex flex-col space-y-4">
           <div className="flex flex-col">

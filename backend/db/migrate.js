@@ -8,7 +8,7 @@ db.prepare(`
     risk_reward REAL NOT NULL,
     risk_amount REAL,
     entry_price REAL NOT NULL,
-    exit_price REAL
+    exit_price REAL,
     pnl REAL,
     outcome TEXT CHECK(outcome IN ('win', 'open', 'lose')) NOT NULL,
     entry_time TEXT NOT NULL,

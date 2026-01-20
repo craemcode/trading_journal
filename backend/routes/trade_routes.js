@@ -3,7 +3,7 @@ import db from "../db/db.js";
 
 const router = express.Router();
 
-router.post("/", (req, res) => {
+router.post("/new_trade", (req, res) => {
   const {
     instrument,
     direction,
@@ -90,7 +90,7 @@ router.get("/", (req, res) => {
   res.json(trades);
 });
 
-
+//get all running trades
 router.get("/running", (req, res) => {
   const trades = db.prepare(`
     SELECT *
@@ -102,6 +102,31 @@ router.get("/running", (req, res) => {
   res.json(trades);
 });
 
+//close a particular trade
+router.post("/:id/close", (req, res) => {
+  const { exit_price, pnl, post_notes } = req.body;
+  const { id } = req.params;
+
+  if (exit_price == null || pnl == null) {
+    return res.status(400).json({ error: "Missing fields" });
+  }
+
+  const outcome = pnl >= 0 ? "win" : "lose";
+
+  const stmt = db.prepare(`
+    UPDATE trades
+    SET
+      exit_time = CURRENT_TIMESTAMP,
+      pnl = ?,
+      outcome = ?,
+      post_notes = ?
+    WHERE id = ?
+  `);
+
+  stmt.run(pnl, outcome, post_notes, id);
+
+  res.json({ success: true });
+});
 
 
 
