@@ -20,7 +20,7 @@ app.get("/health", (req, res) => {
 });
 
 //route registrations.
-app.use("/new_trade", router);
+app.use("/trades", router);
 
 
 export default app

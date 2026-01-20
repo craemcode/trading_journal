@@ -81,6 +81,7 @@ router.post("/", (req, res) => {
   }
 });
 
+//get all trades (not yet made)
 router.get("/", (req, res) => {
   const trades = db.prepare(`
     SELECT * FROM trades ORDER BY entry_time DESC
@@ -88,5 +89,21 @@ router.get("/", (req, res) => {
 
   res.json(trades);
 });
+
+
+router.get("/running", (req, res) => {
+  const trades = db.prepare(`
+    SELECT *
+    FROM trades
+    WHERE outcome = 'open'
+    ORDER BY entry_time DESC
+  `).all();
+
+  res.json(trades);
+});
+
+
+
+
 
 export default router;
