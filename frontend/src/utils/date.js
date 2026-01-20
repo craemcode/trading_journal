@@ -12,7 +12,7 @@ export const formatDate = (
 
   const dayMonth = date.toLocaleDateString("en-GB", {
     day: "2-digit",
-    month: "short",
+    month: "numeric",
   });
 
   if (options.withTime) {
@@ -23,7 +23,7 @@ export const formatDate = (
     });
 
    //return `${year} ${weekday} ${dayMonth} · ${time}`;
-   return `${time} - ${weekday} ${dayMonth} ${year}`;
+   return `${time}-${dayMonth}/${year}`;
   }
 
   return `${year} ${weekday} ${dayMonth}`;

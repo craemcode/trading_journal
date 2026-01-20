@@ -82,9 +82,12 @@ router.post("/new_trade", (req, res) => {
 });
 
 //get all trades (not yet made)
-router.get("/", (req, res) => {
+router.get("/history", (req, res) => {
   const trades = db.prepare(`
-    SELECT * FROM trades ORDER BY entry_time DESC
+    SELECT * 
+    FROM trades 
+    WHERE outcome != 'open'
+    ORDER BY entry_time DESC
   `).all();
 
   res.json(trades);
