@@ -18,77 +18,74 @@ export default function TradeDetailsModal({ trade, onClose }) {
         </div>       
        
         <div className="p-6">
+          <div className="grid grid-cols-3 gap-4 text-sm">
+            <div className="flex flex-col">
+              <p className="text-gray-500 place-self-start font-bold">Entry Time</p>
+              <p className="place-self-start">{formatDate(trade.entry_time, { withTime: true })}</p>
+            </div>
+            <div>
+              <p className="text-gray-500 place-self-start font-bold">Exit Time</p>
+              <p className="place-self-start">{formatDate(trade.exit_time, { withTime: true })}</p>
+            </div>
+            <div>
+              <p className="text-gray-500 place-self-start font-bold">Duration</p>
+              <p className="place-self-start">{durationMin} min</p>
+            </div>
 
-        
-        <div className="grid grid-cols-3 gap-4 text-sm">
-          <div className="flex flex-col">
-            <p className="text-gray-500 place-self-start">Entry Time</p>
-            <p className="place-self-start">{formatDate(trade.entry_time, {withTime: true})}</p>
-          </div>
-          <div>
-            <p className="text-gray-500 place-self-start">Exit Time</p>
-            <p className="place-self-start">{formatDate(trade.exit_time, {withTime: true})}</p>
-          </div>
-          <div>
-            <p className="text-gray-500 place-self-start">Duration</p>
-            <p className="place-self-start">{durationMin} min</p>
+            <div>
+              <p className="text-gray-500 place-self-start font-bold">Instrument</p>
+              <p className="place-self-start">{trade.instrument}</p>
+            </div>
+            <div>
+              <p className="text-gray-500 place-self-start font-bold">Direction</p>
+              <p className="capitalize place-self-start">{trade.direction}</p>
+            </div>
+            <div>
+              <p className="text-gray-500 place-self-start font-bold">Outcome</p>
+              <p className="capitalize place-self-start">{trade.outcome}</p>
+            </div>
+
+            <div>
+              <p className="text-gray-500 place-self-start font-bold">Entry Price</p>
+              <p className="place-self-start">$ {dollarAmount(trade.entry_price)}</p>
+            </div>
+            <div>
+              <p className="text-gray-500 place-self-start font-bold">Exit Price</p>
+              <p className="place-self-start">$ {dollarAmount(trade.exit_price)}</p>
+            </div>
+            <div>
+              <p className="text-gray-500 place-self-start font-bold">PnL</p>
+              <p
+                className={`place-self-start font-medium ${trade.pnl >= 0 ? "text-green-600" : "text-red-600"
+                  }`}
+              >
+                $ {dollarAmount(trade.pnl)}
+              </p>
+            </div>
           </div>
 
-          <div>
-            <p className="text-gray-500 place-self-start">Instrument</p>
-            <p className="place-self-start">{trade.instrument}</p>
-          </div>
-          <div>
-            <p className="text-gray-500 place-self-start">Direction</p>
-            <p className="capitalize place-self-start">{trade.direction}</p>
-          </div>
-          <div>
-            <p className="text-gray-500 place-self-start">Outcome</p>
-            <p className="capitalize place-self-start">{trade.outcome}</p>
-          </div>
-
-          <div>
-            <p className="text-gray-500 place-self-start">Entry Price</p>
-            <p className="place-self-start">$ {dollarAmount(trade.entry_price)}</p>
-          </div>
-          <div>
-            <p className="text-gray-500 place-self-start">Exit Price</p>
-            <p className="place-self-start">$ {dollarAmount(trade.exit_price)}</p>
-          </div>
-          <div>
-            <p className="text-gray-500 place-self-start">PnL</p>
-            <p
-              className={` place-self-start font-medium ${
-                trade.pnl >= 0 ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              $ {dollarAmount(trade.pnl)}
+          <div className="mt-6">
+            <p className=" place-self-start mb-1 text-sm font-medium">Pre-trade Notes</p>
+            <p className=" text-left rounded w-4/5 bg-blue-50 p-3 text-sm">
+              {trade.pre_notes || "—"}
             </p>
           </div>
-        </div>
 
-        <div className="mt-6">
-          <p className=" place-self-start mb-1 text-sm font-medium">Pre-trade Notes</p>
-          <p className=" text-left rounded w-4/5 bg-blue-50 p-3 text-sm">
-            {trade.pre_notes || "—"}
-          </p>
-        </div>
+          <div className="mt-4">
+            <p className="place-self-start mb-1 text-sm font-medium">Post-trade Notes</p>
+            <p className=" text-left rounded w-4/5 bg-blue-50 p-3 text-sm">
+              {trade.post_notes || "—"}
+            </p>
+          </div>
 
-        <div className="mt-4">
-          <p className="place-self-start mb-1 text-sm font-medium">Post-trade Notes</p>
-          <p className=" text-left rounded w-4/5 bg-blue-50 p-3 text-sm">
-            {trade.post_notes || "—"}
-          </p>
-        </div>
-
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={onClose}
-            className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-          >
-            Dismiss
-          </button>
-        </div>
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={onClose}
+              className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            >
+              Dismiss
+            </button>
+          </div>
         </div>
       </div>
     </div>
