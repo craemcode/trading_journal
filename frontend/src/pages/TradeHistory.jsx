@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-//import TradeDetailsModal from "../components/TradeDetailsModal";
+import TradeDetailsModal from "../components/TradeDetailsModal";
 import { formatDate } from "../utils/date";
 import { dollarAmount } from "../utils/dollarAmount";
 
@@ -24,7 +24,7 @@ export default function TradeHistory() {
         setFiltered(data);
       });
   }, []);
-
+  
   useEffect(() => {
     let result = [...trades];
 
@@ -105,6 +105,8 @@ export default function TradeHistory() {
               <th className="px-2 py-3">Entry</th>
               <th className="px-2 py-3">Exit</th>
               <th className="px-2 py-3">Instrument</th>
+              <th className="px-2 py-3">Entry Price</th>
+              <th className="px-2 py-3">Exit Price</th>
               <th className="px-2 py-3">Direction</th>
               <th className="px-2 py-3">PnL</th>
             </tr>
@@ -119,13 +121,15 @@ export default function TradeHistory() {
                 <td className="pl-2 py-3">{formatDate(trade.entry_time, {withTime: true})}</td>
                 <td className="pl-2 py-3">{formatDate(trade.exit_time, {withTime: true})}</td>
                 <td className="pl-2 py-3">{trade.instrument}</td>
+                <td className="pl-2 py-3">$ {dollarAmount(trade.entry_price)}</td>
+                <td className="pl-2 py-3">$ {dollarAmount(trade.exit_price)}</td>
                 <td className="pl-2 py-3 capitalize">{trade.direction}</td>
                 <td
                   className={`pl-4 py-3 font-medium ${
                     trade.pnl >= 0 ? "text-green-600" : "text-red-600"
                   }`}
                 >
-                  {dollarAmount(trade.pnl)}
+                  $ {dollarAmount(trade.pnl)}
                 </td>
               </tr>
             ))}
