@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-//import CloseTradeModal from "../components/CloseTradeModal";
+import CloseTradeModal from "../components/CloseTradeModal";
 import { formatDate } from "../utils/date";
 import { dollarAmount } from "../utils/dollarAmount";
 
