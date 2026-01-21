@@ -11,7 +11,11 @@ import TradeHistoryTable from "../components/TradeHistoryTable";
 export default function TradeHistory() {
   const [trades, setTrades] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalTrades, setTotalTrades] = useState(0);
+
 
   const [filters, setFilters] = useState({
     instrument: "",
@@ -22,13 +26,15 @@ export default function TradeHistory() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5000/trades/history")
+    fetch(`http://localhost:5000/trades/history?page=${page}&limit=${limit}`)
       .then(res => res.json())
-      .then(data => {
-        setTrades(data);
-        setFiltered(data);
+      .then(res => {
+        setTrades(res.data);
+        setFiltered(res.data);
+        setTotalPages(res.pagination.totalPages);
+        setTotalTrades(res.pagination.total);
       });
-  }, []);
+  }, [page, limit]);
   
   useEffect(() => {
     let result = [...trades];
@@ -107,6 +113,31 @@ export default function TradeHistory() {
       <TradeHistoryTable
           trades={filtered}
       />
+      <div className="mt-4 flex justify-center gap-2">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage(p => p - 1)}
+          className="rounded bg-blue-900 text-gray-100 border px-3 py-1 disabled:opacity-50"
+        >
+          Prev
+        </button>
+
+        <span className="px-3 py-1 text-sm">
+          Page {page} of {totalPages}
+        </span>
+
+        <button
+          disabled={page === totalPages}
+          onClick={() => setPage(p => p + 1)}
+          className="rounded bg-blue-900 text-gray-100 border px-3 py-1 disabled:opacity-50"
+        >
+          Next
+        </button>
+         
+      </div>
+      <div className="text-sm pt-3">
+            All trades: {totalTrades}
+        </div>
 
 
       
