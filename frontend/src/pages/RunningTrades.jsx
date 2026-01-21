@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CloseTradeModal from "../components/CloseTradeModal";
 import { formatDate } from "../utils/date";
 import { dollarAmount } from "../utils/dollarAmount";
+import Navbar from "../components/Navbar";
 
 export default function RunningTrades() {
   const [trades, setTrades] = useState([]);
@@ -16,7 +17,8 @@ export default function RunningTrades() {
 
   return (
     <div className="p-6">
-      <h1 className="mb-6 text-2xl font-semibold text-blue-900">
+      <Navbar/>
+      <h1 className="mb-6 mt-6 text-left text-2xl font-semibold text-blue-900">
         Running Trades
       </h1>
 

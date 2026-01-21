@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+import NewTrade from './pages/NewTrade'
 import Dashboard from './pages/Dashboard'
 import RunningTrades from './pages/RunningTrades'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -17,9 +18,10 @@ function App() {
   return (
      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard/>}/>
+          <Route path="/" element={<NewTrade/>}/>
           <Route path="/running" element={<RunningTrades/>}/>
           <Route path="/history" element={<TradeHistory/>}/>
+          <Route path="/dashboard" element={<Dashboard/>}/>
         </Routes>
      
      </BrowserRouter>
