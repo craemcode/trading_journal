@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import TradeDetailsModal from "../components/TradeDetailsModal";
 import { formatDate } from "../utils/date";
 import { dollarAmount } from "../utils/dollarAmount";
+import Navbar from "../components/Navbar";
+
+
+
 
 export default function TradeHistory() {
   const [trades, setTrades] = useState([]);
@@ -57,7 +61,8 @@ export default function TradeHistory() {
 
   return (
     <div className="p-6">
-      <h1 className="mb-6 text-2xl font-semibold text-blue-900">
+      <Navbar/>
+      <h1 className="mb-6 text-left mt-4 text-2xl font-semibold text-blue-900">
         Trade History
       </h1>
 

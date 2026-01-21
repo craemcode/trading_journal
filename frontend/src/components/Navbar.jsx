@@ -7,9 +7,11 @@ import { Link } from "react-router-dom";
  return(
  <nav className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <span className="text-xl font-semibold tracking-wide text-blue-700">
+          <Link 
+          to={`/`}
+          className="text-xl font-semibold tracking-wide text-blue-700">
             JOURNAL
-          </span>
+          </Link>
 
           <div className="flex gap-8 text-slate-600 font-medium">
            
