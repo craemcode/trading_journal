@@ -122,11 +122,12 @@ router.post("/:id/close", (req, res) => {
       exit_time = CURRENT_TIMESTAMP,
       pnl = ?,
       outcome = ?,
-      post_notes = ?
+      post_notes = ?,
+      exit_price = ?
     WHERE id = ?
   `);
 
-  stmt.run(pnl, outcome, post_notes, id);
+  stmt.run(pnl, outcome, post_notes, exit_price, id);
 
   res.json({ success: true });
 });
