@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import Navbar from "../components/Navbar";
 import { dollarAmount } from "../utils/dollarAmount";
+import TradeHistoryTable from "../components/TradeHistoryTable";
 
 
 export default function Dashboard() {
@@ -162,33 +163,10 @@ export default function Dashboard() {
         <h2 className="mb-4 text-lg font-semibold text-blue-900">
           Recent Trades
         </h2>
-
-        <table className="w-full text-sm">
-          <thead className="bg-blue-50 text-left">
-            <tr>
-              <th className="px-3 py-2">Instrument</th>
-              <th className="px-3 py-2">Direction</th>
-              <th className="px-3 py-2">PnL</th>
-              <th className="px-3 py-2">Exit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lastTrades.map(t => (
-              <tr key={t.id} className="border-t">
-                <td className="px-3 py-2">{t.instrument}</td>
-                <td className="px-3 py-2 capitalize">{t.direction}</td>
-                <td
-                  className={`px-3 py-2 font-medium ${
-                    t.pnl >= 0 ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {t.pnl}
-                </td>
-                <td className="px-3 py-2">{t.exit_time}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <TradeHistoryTable
+          trades={lastTrades}
+        />
+        
       </div>
     </div>
   );
