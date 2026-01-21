@@ -107,7 +107,7 @@ router.get("/running", (req, res) => {
 
 //close a particular trade
 router.post("/:id/close", (req, res) => {
-  const { exit_price, pnl, post_notes } = req.body;
+  const { exit_price, pnl, post_notes, exit_time } = req.body;
   const { id } = req.params;
 
   if (exit_price == null || pnl == null) {
@@ -119,7 +119,7 @@ router.post("/:id/close", (req, res) => {
   const stmt = db.prepare(`
     UPDATE trades
     SET
-      exit_time = CURRENT_TIMESTAMP,
+      exit_time = ?,
       pnl = ?,
       outcome = ?,
       post_notes = ?,
@@ -127,7 +127,7 @@ router.post("/:id/close", (req, res) => {
     WHERE id = ?
   `);
 
-  stmt.run(pnl, outcome, post_notes, exit_price, id);
+  stmt.run(exit_time, pnl, outcome, post_notes, exit_price, id);
 
   res.json({ success: true });
 });

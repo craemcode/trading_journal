@@ -15,7 +15,8 @@ export default function CloseTradeModal({ trade, onClose, onSuccess }) {
         body: JSON.stringify({
           exit_price: Number(exitPrice),
           pnl: Number(pnl),
-          post_notes: postNotes
+          post_notes: postNotes,
+          exit_time: new Date().toISOString()
         })
       }
     );

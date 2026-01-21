@@ -35,7 +35,7 @@ const TradeHistoryTable = ({trades}) => {
                     className="cursor-pointer border-t hover:bg-gray-50"
                   >
                     <td className="pl-2 py-3">{formatDate(trade.entry_time, {withTime: true})}</td>
-                    <td className="pl-2 py-3">{trade.strategy}</td>
+                    <td className="pl-2 py-3">{formatDate(trade.exit_time, {withTime: true})}</td>
                     <td className="pl-2 py-3">{trade.instrument}</td>
                     <td className="pl-2 py-3">$ {dollarAmount(trade.entry_price)}</td>
                     <td className="pl-2 py-3">$ {dollarAmount(trade.exit_price)}</td>
