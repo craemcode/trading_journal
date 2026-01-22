@@ -11,13 +11,15 @@ import {
 } from "recharts";
 import Navbar from "../components/Navbar";
 import { dollarAmount } from "../utils/dollarAmount";
+import TradeHistoryTable from "../components/TradeHistoryTable";
+import { formatDate } from "../utils/date";
 
 
 export default function Dashboard() {
   const [trades, setTrades] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/trades/history")
+    fetch("http://localhost:5000/trades/all_history")
       .then(res => res.json())
       .then(setTrades)
       .catch(console.error);
@@ -58,7 +60,7 @@ export default function Dashboard() {
       .map(t => {
         cumulative += t.pnl;
         return {
-          time: t.exit_time,
+          time: formatDate(t.exit_time, {withTime: true}),
           equity: cumulative
         };
       });
@@ -96,38 +98,88 @@ export default function Dashboard() {
                  <Stat label="Total PnL" value={`$ ${dollarAmount(stats.totalPnL)}`} />
             </div>
             <div className="border bg-gray-50 shadow-sm">
+                <div className="flex ">
+                  <img className="size-4 mt-3 ml-2" src="arrow.png" alt="" />
+                  <Stat label="Biggest Win" value={`$ ${dollarAmount(Math.max(0, ...stats.wins.map(t => t.pnl)))}`} />
+                </div>
+                <div className="flex">
+                   <img className="size-4 mt-3 ml-2" src="red_arrow.png" alt="" />
+                  <Stat label="Biggest Loss" value={`$ ${dollarAmount(Math.min(0, ...stats.losses.map(t => t.pnl)))}`} />
                 
-                <Stat label="Biggest Win" value={`$ ${dollarAmount(Math.max(0, ...stats.wins.map(t => t.pnl)))}`} />
-            <Stat label="Biggest Loss" value={`$ ${dollarAmount(Math.min(0, ...stats.losses.map(t => t.pnl)))}`} />
+                </div>
+            
             </div>
            <div className="border bg-gray-50 shadow-sm">
+              <div className="flex">
+                <img className="size-4 mt-3 ml-2" src="arrow.png" alt="" />
                 <Stat
-              label="Avg Win"
-              value={` $ ${
-                dollarAmount(stats.wins.length
-                  ? (
+                  label="Avg Win"
+                  value={` $ ${dollarAmount(stats.wins.length
+                    ? (
                       stats.wins.reduce((s, t) => s + t.pnl, 0) /
                       stats.wins.length
                     )
-                  : 0)
-                }`}
-            />
-            <Stat
-              label="Avg Loss"
-              value={`$ ${
-                dollarAmount(stats.losses.length
-                  ? (
+                    : 0)
+                    }`}
+                />
+              </div>
+
+              <div className="flex">
+                <img className="size-4 mt-3 ml-2" src="red_arrow.png" alt="" />
+                <Stat
+                  label="Avg Loss"
+                  value={`$ ${dollarAmount(stats.losses.length
+                    ? (
                       stats.losses.reduce((s, t) => s + t.pnl, 0) /
                       stats.losses.length
                     )
-                  : 0)
-                }`}
-            />
+                    : 0)
+                    }`}
+                />
 
+              </div>
+            
+            
            </div>
            <div className="border bg-gray-50 shadow-sm">
-                <Stat label="Win Ratio" value={`${(winRatio * 100).toFixed(1)}%`} />
-                <Stat label="Avg RR" value={stats.avgRR.toFixed(2)} />
+                <div className="grid grid-cols-2">
+                    <div className="">
+                        <Stat label="Win Ratio" value={`${(winRatio * 100).toFixed(1)}%`} />
+                        <Stat label="Avg RR" value={stats.avgRR.toFixed(2)} />
+                    </div>
+                <div className="">
+                  <div className="pl-2">
+                    <PieChart width={100} height={120}>
+                      <Pie
+                        data={ringData}
+                        innerRadius={30}
+                        outerRadius={40}
+                        dataKey="value"
+                      >
+                        <Cell fill="#16a34a" />
+                        <Cell fill="#dc2626" />
+                      </Pie>
+                    </PieChart>
+                  </div>
+                  
+                  <div className=" flex justify-around p-2 mr-2 font-semibold">
+                      <p className="flex ">
+                        
+                        <img className="size-3 mr-1 mt-1" src="arrow.png" alt="" />
+                        {stats.wins.length} W
+                    </p>
+                    <p className="flex mx-1 ">
+                        <img className="size-3 mr-1 mt-1" src="red_arrow.png" alt="" />
+                        {stats.losses.length} L
+                    </p>
+                  </div>
+                    
+                  
+                </div>
+                   
+                </div>
+
+                
 
            </div>
                       
@@ -137,7 +189,7 @@ export default function Dashboard() {
         </div>
 
         {/* Equity Curve */}
-        <div className="rounded-lg bg-white p-6 border">
+        <div className="overflow-x-auto rounded-lg bg-white p-6 border">
           <h2 className="mb-4 text-lg font-semibold text-blue-900">
             Equity Curve
           </h2>
@@ -162,33 +214,10 @@ export default function Dashboard() {
         <h2 className="mb-4 text-lg font-semibold text-blue-900">
           Recent Trades
         </h2>
-
-        <table className="w-full text-sm">
-          <thead className="bg-blue-50 text-left">
-            <tr>
-              <th className="px-3 py-2">Instrument</th>
-              <th className="px-3 py-2">Direction</th>
-              <th className="px-3 py-2">PnL</th>
-              <th className="px-3 py-2">Exit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lastTrades.map(t => (
-              <tr key={t.id} className="border-t">
-                <td className="px-3 py-2">{t.instrument}</td>
-                <td className="px-3 py-2 capitalize">{t.direction}</td>
-                <td
-                  className={`px-3 py-2 font-medium ${
-                    t.pnl >= 0 ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {t.pnl}
-                </td>
-                <td className="px-3 py-2">{t.exit_time}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <TradeHistoryTable
+          trades={lastTrades}
+        />
+        
       </div>
     </div>
   );
@@ -196,7 +225,7 @@ export default function Dashboard() {
 
 function Stat({ label, value }) {
   return (
-    <div className="p-2 ml-2">
+    <div className="p-2 ">
       <p className=" place-self-start text-gray-500">{label}</p>
       <p className="place-self-start text-xl font-semibold">{value}</p>
     </div>

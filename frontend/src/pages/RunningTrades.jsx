@@ -24,7 +24,7 @@ export default function RunningTrades() {
 
       <div className="overflow-x-auto rounded-lg border bg-white">
         <table className="w-full text-sm">
-          <thead className="bg-blue-50 text-left text-blue-900">
+          <thead className="bg-blue-50 text-blue-900">
             <tr>
               <th className="px-4 py-3">Instrument</th>
               <th className="px-4 py-3">Direction</th>

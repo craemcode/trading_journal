@@ -83,12 +83,48 @@ router.post("/new_trade", (req, res) => {
 
 //get all trades (not yet made)
 router.get("/history", (req, res) => {
+  
+  const page = Math.max(Number(req.query.page) || 1, 1);
+  const limit = Math.min(Number(req.query.limit) || 20, 100);
+  const offset = (page - 1) * limit;
+  
+  
+  
   const trades = db.prepare(`
     SELECT * 
     FROM trades 
     WHERE outcome != 'open'
     ORDER BY entry_time DESC
-  `).all();
+    LIMIT ? OFFSET ?
+  `).all(limit, offset);
+
+  const total = db.prepare(`
+    SELECT COUNT(*) as count
+    FROM trades
+    WHERE outcome != 'open'
+  `).get().count;
+
+
+
+  res.json({
+    data: trades,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit)
+    }
+  });
+});
+
+//get all trades for calculating stats and drawing equity curve
+router.get("/all_history", (req, res) => {
+	  const trades = db.prepare(`
+    SELECT * 
+    FROM trades 
+    WHERE outcome != 'open'
+    ORDER BY entry_time DESC
+	`).all();
 
   res.json(trades);
 });
@@ -107,7 +143,7 @@ router.get("/running", (req, res) => {
 
 //close a particular trade
 router.post("/:id/close", (req, res) => {
-  const { exit_price, pnl, post_notes } = req.body;
+  const { exit_price, pnl, post_notes, exit_time } = req.body;
   const { id } = req.params;
 
   if (exit_price == null || pnl == null) {
@@ -119,14 +155,15 @@ router.post("/:id/close", (req, res) => {
   const stmt = db.prepare(`
     UPDATE trades
     SET
-      exit_time = CURRENT_TIMESTAMP,
+      exit_time = ?,
       pnl = ?,
       outcome = ?,
-      post_notes = ?
+      post_notes = ?,
+      exit_price = ?
     WHERE id = ?
   `);
 
-  stmt.run(pnl, outcome, post_notes, id);
+  stmt.run(exit_time, pnl, outcome, post_notes, exit_price, id);
 
   res.json({ success: true });
 });
