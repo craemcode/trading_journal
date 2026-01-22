@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { registerUser } from "../lib/api";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -9,6 +10,8 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+
+  const [error, setError] = useState(null);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,9 +24,14 @@ export default function Register() {
       alert("Passwords do not match");
       return;
     }
-
-    // API call will be added later
-    navigate("/login");
+    
+     try {
+      await registerUser(form.username, form.password);
+      navigate("/login");
+    } catch (err) {
+      setError(err.message);
+    }
+    
   }
 
   return (
@@ -37,11 +45,17 @@ export default function Register() {
           onSubmit={handleSubmit}
           className="mt-6 space-y-4 rounded-xl border border-slate-800 bg-slate-900 p-6"
         >
+
+            {error && (
+            <div className="rounded-lg bg-red-100 px-3 py-2 text-sm text-red-700">
+              {error}
+            </div>
+          )}
           <div>
             <label className="block text-sm text-slate-400">Username</label>
             <input
-              name="email"
-              type="email"
+              name="username"
+              type="text"
               value={form.username}
               onChange={handleChange}
               className="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-white outline-none ring-blue-500 focus:ring-2"
