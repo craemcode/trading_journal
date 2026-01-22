@@ -20,7 +20,7 @@ app.get("/health", (req, res) => {
 });
 
 //authentication routes
-app.use("/auth", authRouter)
+app.use("/auth", authRouter);
 
 //route registrations.
 app.use("/trades", router);

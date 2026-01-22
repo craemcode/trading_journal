@@ -45,4 +45,4 @@ router.post("/login", async (req, res) => {
   res.json({ token });
 });
 
-export default authRouter;
+export default router;
