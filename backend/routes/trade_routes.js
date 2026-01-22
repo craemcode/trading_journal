@@ -1,9 +1,10 @@
 import express from "express";
 import db from "../db/db.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/new_trade", (req, res) => {
+router.post("/new_trade", authMiddleware, (req, res) => {
   const {
     instrument,
     direction,
@@ -50,6 +51,7 @@ router.post("/new_trade", (req, res) => {
   try {
     const stmt = db.prepare(`
       INSERT INTO trades (
+        user_id,
         instrument,
         direction,
         risk_reward,
@@ -59,10 +61,11 @@ router.post("/new_trade", (req, res) => {
         entry_time,
         strategy,
         pre_notes
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     stmt.run(
+      req.userId,
       instrument.trim(),
       direction,
       Number(risk_reward),
@@ -93,16 +96,18 @@ router.get("/history", (req, res) => {
   const trades = db.prepare(`
     SELECT * 
     FROM trades 
-    WHERE outcome != 'open'
+    WHERE user_id = ?
+    AND outcome != 'open'
     ORDER BY entry_time DESC
     LIMIT ? OFFSET ?
-  `).all(limit, offset);
+  `).all(req.userId,limit, offset);
 
   const total = db.prepare(`
     SELECT COUNT(*) as count
     FROM trades
-    WHERE outcome != 'open'
-  `).get().count;
+    WHERE user_id = ?
+    AND outcome != 'open'
+  `).get(req.userId).count;
 
 
 
@@ -122,7 +127,8 @@ router.get("/all_history", (req, res) => {
 	  const trades = db.prepare(`
     SELECT * 
     FROM trades 
-    WHERE outcome != 'open'
+    WHERE user_id = ?
+    AND outcome != 'open'
     ORDER BY entry_time DESC
 	`).all();
 
@@ -130,13 +136,14 @@ router.get("/all_history", (req, res) => {
 });
 
 //get all running trades
-router.get("/running", (req, res) => {
+router.get("/running", authMiddleware, (req, res) => {
   const trades = db.prepare(`
     SELECT *
     FROM trades
-    WHERE outcome = 'open'
+    WHERE user_id = ?
+    AND outcome = 'open'
     ORDER BY entry_time DESC
-  `).all();
+  `).all(req.userId);
 
   res.json(trades);
 });
