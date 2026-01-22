@@ -123,7 +123,7 @@ router.get("/history", (req, res) => {
 });
 
 //get all trades for calculating stats and drawing equity curve
-router.get("/all_history", (req, res) => {
+router.get("/all_history", authMiddleware,(req, res) => {
 	  const trades = db.prepare(`
     SELECT * 
     FROM trades 
@@ -149,7 +149,7 @@ router.get("/running", authMiddleware, (req, res) => {
 });
 
 //close a particular trade
-router.post("/:id/close", (req, res) => {
+router.post("/:id/close", authMiddleware, (req, res) => {
   const { exit_price, pnl, post_notes, exit_time } = req.body;
   const { id } = req.params;
 
