@@ -162,15 +162,15 @@ export default function Dashboard() {
                     </PieChart>
                   </div>
                   
-                  <div className=" flex justify-between p-2 mr-1 ">
+                  <div className=" flex justify-around p-2 mr-2 font-semibold">
                       <p className="flex ">
                         
                         <img className="size-3 mr-1 mt-1" src="arrow.png" alt="" />
-                         Wins {stats.wins.length}
+                        {stats.wins.length} W
                     </p>
-                    <p className="flex mx-1">
+                    <p className="flex mx-1 ">
                         <img className="size-3 mr-1 mt-1" src="red_arrow.png" alt="" />
-                        Losses {stats.losses.length}
+                        {stats.losses.length} L
                     </p>
                   </div>
                     

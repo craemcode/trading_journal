@@ -7,7 +7,7 @@ export default function NewTrade() {
         <Navbar/>
 
         
-         <main className="max-w-7xl mx-auto px-6 py-10">
+         <main className="max-w-7xl mx-auto place-self-center w-4/5 px-6 py-10">
         <TradeEntryForm />
       </main>
 
