@@ -39,7 +39,13 @@ const TradeHistoryTable = ({trades}) => {
                     <td className="pl-2 py-3">{trade.instrument}</td>
                     <td className="pl-2 py-3">$ {dollarAmount(trade.entry_price)}</td>
                     <td className="pl-2 py-3">$ {dollarAmount(trade.exit_price)}</td>
-                    <td className="pl-2 py-3 capitalize">{trade.direction}</td>
+                    <td className="pl-2 py-3 capitalize">
+                      <span className={`px-2 py-1 rounded-full ${
+                        trade.direction === "long" ? "bg-green-200 text-green-900"
+                                                    : "bg-red-200 text-red-900" }`}>
+                        {trade.direction}
+                        </span>
+                    </td>
                     <td
                       className={`pl-4 py-3 font-medium ${
                         trade.pnl >= 0 ? "text-green-600" : "text-red-600"

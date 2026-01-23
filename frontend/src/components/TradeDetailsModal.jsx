@@ -36,11 +36,18 @@ export default function TradeDetailsModal({ trade, onClose }) {
             </div>
             <div>
               <p className="text-gray-500 place-self-start font-bold">Direction</p>
-              <p className="capitalize place-self-start">{trade.direction}</p>
+              <p className="capitalize place-self-start pt-1">
+                <span className={` px-2 py-1 rounded-full ${
+                        trade.direction === "long" ? "bg-green-200 text-green-900"
+                                                    : "bg-red-200 text-red-900" }`}>
+                    {trade.direction}
+                </span>
+                
+                </p>
             </div>
             <div>
               <p className="text-gray-500 place-self-start font-bold">Outcome</p>
-              <p className="capitalize place-self-start">{trade.outcome}</p>
+              <p className={`capitalize font-semibold place-self-start ${trade.pnl >= 0 ? "text-green-600" : "text-red-600"}`}>{trade.outcome}</p>
             </div>
 
             <div>
