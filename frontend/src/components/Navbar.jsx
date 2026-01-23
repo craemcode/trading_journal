@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import LogoutButton from "./LogoutButton";
 
  
  export default function Navbar(){
@@ -33,6 +34,8 @@ import { Link } from "react-router-dom";
               >
                 Trade History
               </Link>
+              
+              <LogoutButton/>
 
 
           </div>
