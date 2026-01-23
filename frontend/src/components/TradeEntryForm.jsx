@@ -1,5 +1,6 @@
 import { useState } from "react";
 import StatusMessage from "./StatusMessage";
+import { saveNewTrade } from "../lib/api";
 
 export default function TradeEntryForm() {
   const [direction, setDirection] = useState("long");
@@ -21,7 +22,7 @@ export default function TradeEntryForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus(null);
-    console.log(form)
+    
     // ---------- Frontend validation ----------
     if (
       !form.instrument ||
@@ -48,12 +49,8 @@ export default function TradeEntryForm() {
       return setStatus({ type: "error", msg: "Notes max 1000 characters" });
     }
 
-    try {
-      const res = await fetch("http://localhost:5000/trades/new_trade", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          instrument: form.instrument.trim(),
+    const formdata = {
+		      instrument: form.instrument.trim(),
           direction,
           risk_reward: Number(form.risk_reward),
           risk_amount: Number(form.risk_amount),
@@ -61,16 +58,14 @@ export default function TradeEntryForm() {
           entry_time: new Date().toISOString(),
           strategy: form.strategy.trim(),
           pre_notes: form.pre_notes.trim(),
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message);
-      }
-
-      setStatus({ type: "success", msg: "Trade saved successfully" });
+    }
+   
+   
+    try {
+      //central api function.
+      const res = await saveNewTrade(formdata)
+      
+      setStatus({ type: "success", msg: res.message });
       setForm({
         instrument: "",
         risk_reward: "",
@@ -100,12 +95,6 @@ export default function TradeEntryForm() {
                 status={status}
                 onClose={()=> setStatus(null)}
         />
-
-
-
-
-
-
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 ">
         {/* Instrument */}

@@ -13,19 +13,25 @@ import Navbar from "../components/Navbar";
 import { dollarAmount } from "../utils/dollarAmount";
 import TradeHistoryTable from "../components/TradeHistoryTable";
 import { formatDate } from "../utils/date";
+import { getDashboard } from "../lib/api";
 
 
 export default function Dashboard() {
   const [trades, setTrades] = useState([]);
-  const token = localStorage.getItem("token");
+  
   
   useEffect(() => {
-    fetch("http://localhost:5000/trades/all_history", {
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`}},
-    )
-      .then(res => res.json())
-      .then(setTrades)
-      .catch(console.error);
+    async function loadDashboard(){
+    try{
+      const trades = await getDashboard();
+
+      setTrades(trades);
+    }catch{
+      setStatus({type: error, msg: "An error happened"});
+
+    }
+  }
+  loadDashboard();
   }, []);
 
   // ---------- Derived Statistics ----------

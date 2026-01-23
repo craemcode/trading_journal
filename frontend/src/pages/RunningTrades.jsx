@@ -3,16 +3,26 @@ import CloseTradeModal from "../components/CloseTradeModal";
 import { formatDate } from "../utils/date";
 import { dollarAmount } from "../utils/dollarAmount";
 import Navbar from "../components/Navbar";
+import { getRunningTrades } from "../lib/api";
+import StatusMessage from "../components/StatusMessage";
 
 export default function RunningTrades() {
   const [trades, setTrades] = useState([]);
   const [selectedTrade, setSelectedTrade] = useState(null);
+  const [status, setStatus] = useState(null);
+
 
   useEffect(() => {
-    fetch("http://localhost:5000/trades/running")
-      .then(res => res.json())
-      .then(setTrades)
-      .catch(console.error);
+    async function loadRunners(){
+      try{
+      const trades = await getRunningTrades();
+      setTrades(trades)
+      }catch(err){
+          setStatus({type: "error", msg: err.message})
+      }
+    }
+
+    loadRunners();
   }, []);
 
   return (
@@ -21,7 +31,10 @@ export default function RunningTrades() {
       <h1 className="mb-6 mt-6 text-left text-2xl font-semibold text-blue-900">
         Running Trades
       </h1>
-
+              <StatusMessage 
+                              status={status}
+                              onClose={()=> setStatus(null)}
+                      />
       <div className="overflow-x-auto rounded-lg border bg-white">
         <table className="w-full text-sm">
           <thead className="bg-blue-50 text-blue-900">

@@ -4,7 +4,8 @@ import { formatDate } from "../utils/date";
 import { dollarAmount } from "../utils/dollarAmount";
 import Navbar from "../components/Navbar";
 import TradeHistoryTable from "../components/TradeHistoryTable";
-
+import { getTradeHistory } from "../lib/api";
+import StatusMessage from "../components/StatusMessage";
 
 
 
@@ -15,6 +16,7 @@ export default function TradeHistory() {
   const [limit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalTrades, setTotalTrades] = useState(0);
+  const [status, setStatus] = useState(null);
 
 
   const [filters, setFilters] = useState({
@@ -26,14 +28,19 @@ export default function TradeHistory() {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:5000/trades/history?page=${page}&limit=${limit}`)
-      .then(res => res.json())
-      .then(res => {
-        setTrades(res.data);
-        setFiltered(res.data);
-        setTotalPages(res.pagination.totalPages);
-        setTotalTrades(res.pagination.total);
-      });
+    async function loadHistory(){
+      try{
+      const res = await getTradeHistory(page,limit);
+      setTrades(res.data);
+      setFiltered(res.data);
+      setTotalPages(res.pagination.totalPages)
+      setTotalTrades(res.pagination.total)
+      }catch(err){
+        setStatus({type: "error", msg: err.message})
+      }
+    }
+
+    loadHistory()
   }, [page, limit]);
   
   useEffect(() => {
@@ -108,6 +115,10 @@ export default function TradeHistory() {
           onChange={e => setFilters({ ...filters, to: e.target.value })}
         />
       </div>
+      <StatusMessage 
+                                    status={status}
+                                    onClose={()=> setStatus(null)}
+                            />
 
       {/* Table */}
       <TradeHistoryTable

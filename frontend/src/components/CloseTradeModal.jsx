@@ -1,29 +1,30 @@
 import { useState } from "react";
+import { closeTrade } from "../lib/api";
+import StatusMessage from "./StatusMessage";
 
 export default function CloseTradeModal({ trade, onClose, onSuccess }) {
   const [exitPrice, setExitPrice] = useState("");
   const [pnl, setPnl] = useState("");
   const [postNotes, setPostNotes] = useState("");
+  const [status, setStatus] = useState(null);
+ 
+ 
   const handleSubmit = async () => {
     if (!exitPrice || !pnl) return;
 
-    const res = await fetch(
-      `http://localhost:5000/trades/${trade.id}/close`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+    const tradedata = {
           exit_price: Number(exitPrice),
           pnl: Number(pnl),
           post_notes: postNotes,
           exit_time: new Date().toISOString()
-        })
-      }
-    );
-
-    if (res.ok) {
-      onSuccess();
     }
+    try{
+    const res = await closeTrade(trade.id,tradedata);
+      onSuccess();
+    
+        }catch(err){
+          setStatus({type: "error", msg: err.message})
+        }
   };
 
   return (
@@ -47,6 +48,10 @@ export default function CloseTradeModal({ trade, onClose, onSuccess }) {
               </h2>
 
         <div className=" flex flex-col space-y-4">
+              <StatusMessage 
+                                            status={status}
+                                            onClose={()=> setStatus(null)}
+                                    />
           <div className="flex flex-col">
             <label className="block place-self-start text-sm font-medium">Closing Price</label>
             <input
