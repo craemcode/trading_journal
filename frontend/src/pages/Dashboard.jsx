@@ -17,9 +17,12 @@ import { formatDate } from "../utils/date";
 
 export default function Dashboard() {
   const [trades, setTrades] = useState([]);
-
+  const token = localStorage.getItem("token");
+  
   useEffect(() => {
-    fetch("http://localhost:5000/trades/all_history")
+    fetch("http://localhost:5000/trades/all_history", {
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`}},
+    )
       .then(res => res.json())
       .then(setTrades)
       .catch(console.error);

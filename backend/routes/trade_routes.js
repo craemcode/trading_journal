@@ -130,7 +130,7 @@ router.get("/all_history", authMiddleware,(req, res) => {
     WHERE user_id = ?
     AND outcome != 'open'
     ORDER BY entry_time DESC
-	`).all();
+	`).all(req.userId);
 
   res.json(trades);
 });
