@@ -1,11 +1,9 @@
 import { dollarAmount } from "../utils/dollarAmount";
 import { formatDate } from "../utils/date";
-
+import { formatTradeDuration } from "../lib/duration";
 
 export default function TradeDetailsModal({ trade, onClose }) {
-  const durationMs =
-    new Date(trade.exit_time) - new Date(trade.entry_time);
-  const durationMin = Math.round(durationMs / 60000);
+  const duration = formatTradeDuration(trade.entry_time, trade.exit_time);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -29,7 +27,7 @@ export default function TradeDetailsModal({ trade, onClose }) {
             </div>
             <div>
               <p className="text-gray-500 place-self-start font-bold">Duration</p>
-              <p className="place-self-start">{durationMin} min</p>
+              <p className="place-self-start">{duration}</p>
             </div>
 
             <div>

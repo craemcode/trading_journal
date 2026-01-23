@@ -60,7 +60,6 @@ export async function fetchWithAuth(url, options = {}) {
   return res;
 }
 
-
 //dashboard function.
 export async function getDashboard(){
       const res = await fetchWithAuth(
