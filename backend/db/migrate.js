@@ -24,6 +24,8 @@ db.exec(`
     strategy TEXT,
     pre_notes TEXT,
     post_notes TEXT,
+    entry_screenshot TEXT,
+    exit_screenshot TEXT,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id)
   );
