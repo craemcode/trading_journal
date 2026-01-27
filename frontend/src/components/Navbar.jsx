@@ -15,7 +15,13 @@ import LogoutButton from "./LogoutButton";
           </Link>
 
           <div className="flex gap-8 text-slate-600 font-medium">
-           
+              <Link
+                to={`/new_trade`}
+                className="relative transition-all duration-200 hover:-translate-y-0.5 hover:text-blue-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all hover:after:w-full"
+                >
+                  New Trade
+                </Link>
+             
               <Link
                 to={`/dashboard`}
                 className="relative transition-all duration-200 hover:-translate-y-0.5 hover:text-blue-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all hover:after:w-full"

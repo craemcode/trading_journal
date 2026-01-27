@@ -27,12 +27,13 @@ export default function Landing() {
 
             <Link
               to="/login"
-              className="rounded-lg border border-slate-700 px-6 py-3 font-medium  hover:bg-slate-800"
+              className="rounded-lg border border-slate-700 px-6 py-3 font-medium hover:text-gray-100 hover:bg-slate-800"
             >
               Login
             </Link>
           </div>
         </section>
+         
 
         {/* Placeholder for screenshots */}
         <section className="mt-24 rounded-xl border border-slate-800 bg-slate-900 p-10 text-center text-slate-400">
