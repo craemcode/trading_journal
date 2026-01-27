@@ -1,10 +1,11 @@
 import express from "express";
 import db from "../db/db.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import { upload } from "../middleware/upload.js";
 
 const router = express.Router();
 
-router.post("/new_trade", authMiddleware, (req, res) => {
+router.post("/new_trade", authMiddleware, upload.single("entry_screenshot"), (req, res) => {
   const {
     instrument,
     direction,
@@ -48,6 +49,8 @@ router.post("/new_trade", authMiddleware, (req, res) => {
   // Outcome is unknown at entry time
   const outcome = "open"; // placeholder or NULL if you later relax constraint
 
+  const entryScreenshot = req.file? req.file.path : null;
+
   try {
     const stmt = db.prepare(`
       INSERT INTO trades (
@@ -60,8 +63,9 @@ router.post("/new_trade", authMiddleware, (req, res) => {
         outcome,
         entry_time,
         strategy,
-        pre_notes
-      ) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?)
+        pre_notes,
+        entry_screenshot,
+      ) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     stmt.run(
@@ -74,7 +78,8 @@ router.post("/new_trade", authMiddleware, (req, res) => {
       outcome,
       entry_time,
       strategy || null,
-      pre_notes || null
+      pre_notes || null,
+      entry_screenshot
     );
 
     res.status(201).json({ message: "Trade saved successfully" });
@@ -149,9 +154,10 @@ router.get("/running", authMiddleware, (req, res) => {
 });
 
 //close a particular trade
-router.post("/:id/close", authMiddleware, (req, res) => {
+router.post("/:id/close", authMiddleware, upload.single("exit_screenshot"), (req, res) => {
   const { exit_price, pnl, post_notes, exit_time } = req.body;
   const { id } = req.params;
+  const exitScreenshot = req.file? req.file.path: null;
 
   if (exit_price == null || pnl == null) {
     return res.status(400).json({ error: "Missing fields" });
@@ -166,11 +172,12 @@ router.post("/:id/close", authMiddleware, (req, res) => {
       pnl = ?,
       outcome = ?,
       post_notes = ?,
-      exit_price = ?
+      exit_price = ?,
+      exit_screenshot = ?,
     WHERE id = ?
   `);
 
-  stmt.run(exit_time, pnl, outcome, post_notes, exit_price, id);
+  stmt.run(exit_time, pnl, outcome, post_notes, exit_price, exitScreenshot, id);
 
   res.json({ success: true });
 });
