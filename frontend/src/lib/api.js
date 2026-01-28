@@ -103,7 +103,7 @@ export async function closeTrade(tradeId,tradedata){
   const res = await fetchWithAuth(
     `${API_BASE_URL}/trades/${tradeId}/close`,{
       method: "POST",
-      body:JSON.stringify(tradedata)
+      body: tradedata
     }
   );
 

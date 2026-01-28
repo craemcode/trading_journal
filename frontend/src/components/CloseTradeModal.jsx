@@ -7,19 +7,33 @@ export default function CloseTradeModal({ trade, onClose, onSuccess }) {
   const [pnl, setPnl] = useState("");
   const [postNotes, setPostNotes] = useState("");
   const [status, setStatus] = useState(null);
- 
+  const [exitFile, setExitFile] = useState(null);
  
   const handleSubmit = async () => {
     if (!exitPrice || !pnl) return;
 
-    const tradedata = {
+    const tradeData = {
           exit_price: Number(exitPrice),
           pnl: Number(pnl),
           post_notes: postNotes,
           exit_time: new Date().toISOString()
     }
+
+   const formData = new FormData();
+    Object.entries(tradeData).forEach(([key, value]) => {
+      formData.append(key, value);
+    }); 
+
+    if (exitFile) {
+      formData.append("exit_screenshot", exitFile);
+    }
+
+
+
+
+
     try{
-    const res = await closeTrade(trade.id,tradedata);
+    const res = await closeTrade(trade.id,formData);
       onSuccess();
     
         }catch(err){
@@ -71,6 +85,17 @@ export default function CloseTradeModal({ trade, onClose, onSuccess }) {
               onChange={e => setPnl(e.target.value)}
             />
           </div>
+          <div className="flex flex-col">
+            <label className="text-sm place-self-start  font-medium text-slate-700 mb-1">Exit Screenshot </label>
+
+            <input
+              type="file"
+              className="text-sm p-2 pl-4 font-medium"
+              accept="image/*"
+              onChange={(e) => setExitFile(e.target.files[0])}
+            />
+          </div>
+          
           <div className="flex flex-col">
             <label className="block place-self-start text-sm font-medium">Post-Trade Notes</label>
             <textarea

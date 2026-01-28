@@ -173,7 +173,7 @@ router.post("/:id/close", authMiddleware, upload.single("exit_screenshot"), (req
       outcome = ?,
       post_notes = ?,
       exit_price = ?,
-      exit_screenshot = ?,
+      exit_screenshot = ?
     WHERE id = ?
   `);
 
