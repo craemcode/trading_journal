@@ -64,7 +64,7 @@ router.post("/new_trade", authMiddleware, upload.single("entry_screenshot"), (re
         entry_time,
         strategy,
         pre_notes,
-        entry_screenshot,
+        entry_screenshot
       ) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
@@ -79,7 +79,7 @@ router.post("/new_trade", authMiddleware, upload.single("entry_screenshot"), (re
       entry_time,
       strategy || null,
       pre_notes || null,
-      entry_screenshot
+      entryScreenshot
     );
 
     res.status(201).json({ message: "Trade saved successfully" });

@@ -35,20 +35,29 @@ export async function loginUser(username, password) {
 
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
-
-  return {
-    "Content-Type": "application/json",
+  headers = {
     Authorization: `Bearer ${token}`,
   };
+  return headers
 }
 
 export async function fetchWithAuth(url, options = {}) {
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    ...options.headers,
+  };
+
+  // ❗ Only set JSON header if body is NOT FormData
+  if (!(options.body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
+  
+  
   const res = await fetch(url, {
     ...options,
-    headers: {
-      ...getAuthHeaders(),
-      ...options.headers,
-    },
+    headers,
   });
 
   if (res.status === 401) {
@@ -74,7 +83,7 @@ export async function saveNewTrade(formdata){
   const res = await fetchWithAuth(
        `${API_BASE_URL}/trades/new_trade`,{
         method: "POST",
-        body: JSON.stringify(formdata)
+        body: formdata
        });
 
      return res.json();  
