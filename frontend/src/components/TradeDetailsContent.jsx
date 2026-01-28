@@ -1,22 +1,27 @@
 import { dollarAmount } from "../utils/dollarAmount";
 import { formatDate } from "../utils/date";
 import { formatTradeDuration } from "../lib/duration";
+import ImageLightBox from "./ImageLightBox";
+import { useState } from "react";
 
-export default function TradeDetailsModal({ trade, onClose }) {
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+export default function TradeDetailsContent({ trade }) {
+  const [lightboxSrc, setLightboxSrc] = useState(null);
+
   const duration = formatTradeDuration(trade.entry_time, trade.exit_time);
+ 
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-3xl rounded-lg bg-white">
-       
-        <div className="bg-blue-50 rounded-t-lg">
-             <h2 className="mb-6 py-4 text-lg  font-semibold text-blue-900">
+       <>
+        <div className=" rounded-t-lg">
+             <h1 className=" ml-3 py-4 text-2xl place-self-start  font-semibold text-blue-900">
           Trade Details
-        </h2>
+        </h1>
         </div>       
        
-        <div className="p-6">
-          <div className="grid grid-cols-3 gap-4 text-sm">
+        <div className="p-3 ">
+          <div className="grid grid-cols-3 gap-4 text-sm bg-blue-50 m-3 p-4 rounded-lg">
             <div className="flex flex-col">
               <p className="text-gray-500 place-self-start font-bold">Entry Time</p>
               <p className="place-self-start">{formatDate(trade.entry_time, { withTime: true })}</p>
@@ -70,29 +75,67 @@ export default function TradeDetailsModal({ trade, onClose }) {
           </div>
 
           <div className="mt-6">
-            <p className=" place-self-start mb-1 text-sm font-medium">Pre-trade Notes</p>
-            <p className=" text-left rounded w-4/5 bg-blue-50 p-3 text-sm">
-              {trade.pre_notes || "—"}
-            </p>
+            
+            <div className="m-3">
+                <p className=" place-self-start mb-1 text-sm font-medium">Pre-trade Notes</p>
+                <p className=" text-left rounded  bg-blue-50 p-3 text-sm">
+                  {trade.pre_notes || "—"}
+                </p>
+            </div>
+            
+            <div className="m-3">
+                <p className="place-self-start mb-1 text-sm font-medium">Post-trade Notes</p>
+                <p className=" text-left rounded  bg-blue-50 p-3 text-sm">
+                  {trade.post_notes || "—"}
+                </p>
+            </div>
+            
           </div>
 
-          <div className="mt-4">
-            <p className="place-self-start mb-1 text-sm font-medium">Post-trade Notes</p>
-            <p className=" text-left rounded w-4/5 bg-blue-50 p-3 text-sm">
-              {trade.post_notes || "—"}
-            </p>
+          <div className="mt-4 flex justify-around ">
+           {trade.entry_screenshot && (
+              <div>
+                <h4 className="text-lg place-self-start font-semibold">Execution Screenshot</h4>
+                <img
+                  src={`${API_BASE_URL}/${trade.entry_screenshot}`}
+                  alt="Entry"
+                  className="rounded-lg size-80 mt-2"
+                  onClick={()=> 
+                    setLightboxSrc(`${API_BASE_URL}/${trade.entry_screenshot}`)
+
+                  }
+                />
+              </div>
+            )}
+
+
+            {trade.exit_screenshot && (
+              <div>
+                <h4 className="text-lg place-self-start font-semibold">Exit Screenshot</h4>
+                <img
+                  src={`${API_BASE_URL}/${trade.exit_screenshot}`}
+                  alt="Exit"
+                  className="rounded-lg size-80 mt-2"
+                   onClick={()=> 
+                    setLightboxSrc(`${API_BASE_URL}/${trade.exit_screenshot}`)
+                   }
+                />
+              </div>
+            )}
+
+            
+            
+
           </div>
 
-          <div className="mt-6 flex justify-end">
-            <button
-              onClick={onClose}
-              className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-            >
-              Dismiss
-            </button>
-          </div>
+        {lightboxSrc && (
+          <ImageLightBox
+            src={lightboxSrc}
+            alt="Trade screenshot"
+            onClose={() => setLightboxSrc(null)}
+          />
+        )}
         </div>
-      </div>
-    </div>
+      </>
   );
 }

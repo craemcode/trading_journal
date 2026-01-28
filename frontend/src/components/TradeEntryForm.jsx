@@ -14,6 +14,7 @@ export default function TradeEntryForm() {
   });
    
   const [status, setStatus] = useState(null);
+  const [entryFile, setEntryFile] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -49,7 +50,7 @@ export default function TradeEntryForm() {
       return setStatus({ type: "error", msg: "Notes max 1000 characters" });
     }
 
-    const formdata = {
+    const tradeData = {
 		      instrument: form.instrument.trim(),
           direction,
           risk_reward: Number(form.risk_reward),
@@ -59,11 +60,22 @@ export default function TradeEntryForm() {
           strategy: form.strategy.trim(),
           pre_notes: form.pre_notes.trim(),
     }
+
+    const formData = new FormData();
+    Object.entries(tradeData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    
+    if (entryFile) {
+      formData.append("entry_screenshot", entryFile);
+    }
+
    
    
     try {
       //central api function.
-      const res = await saveNewTrade(formdata)
+      const res = await saveNewTrade(formData)
       
       setStatus({ type: "success", msg: res.message });
       setForm({
@@ -74,6 +86,7 @@ export default function TradeEntryForm() {
         strategy: "",
         pre_notes: "",
       });
+      //setEntryFile(null);
     } catch (err) {
       setStatus({ type: "error", msg: err.message });
     }
@@ -216,7 +229,19 @@ export default function TradeEntryForm() {
 
         {/* Pre-Trade Notes */}
         <div className="flex flex-col md:col-span-2">
-          <label className="text-sm place-self-start pl-4 font-medium text-slate-700 mb-1">
+          
+          <label className="text-sm place-self-start pl-4 font-medium text-slate-700 mb-1">Entry Screenshot </label>
+          
+          <input
+            type="file"
+            className="text-sm p-2 pl-4 font-medium"
+            accept="image/*"
+            onChange={(e) => setEntryFile(e.target.files[0])}
+          />
+
+
+
+          <label className="text-sm place-self-start pt-2 pl-4 font-medium text-slate-700 mb-1">
             Pre-Trade Notes
           </label>
           <textarea
