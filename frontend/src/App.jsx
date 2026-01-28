@@ -11,6 +11,8 @@ import TradeHistory from './pages/TradeHistory'
 import Landing from './pages/Landing'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import TradeDetails from './pages/TradeDetails'
+
 
 function App() {
   
@@ -29,6 +31,8 @@ function App() {
           <Route path="/running" element={<RunningTrades/>}/>
           <Route path="/history" element={<TradeHistory/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/history/trade/:id" element={<TradeDetails/>}/>
+
         </Routes>
      
      </BrowserRouter>

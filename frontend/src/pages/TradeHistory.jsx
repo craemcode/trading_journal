@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import TradeDetailsModal from "../components/TradeDetailsModal";
+
 import { formatDate } from "../utils/date";
 import { dollarAmount } from "../utils/dollarAmount";
 import Navbar from "../components/Navbar";

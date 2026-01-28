@@ -3,6 +3,7 @@ import db from "../db/db.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import { upload } from "../middleware/upload.js";
 
+
 const router = express.Router();
 
 router.post("/new_trade", authMiddleware, upload.single("entry_screenshot"), (req, res) => {
@@ -139,6 +140,18 @@ router.get("/all_history", authMiddleware,(req, res) => {
 
   res.json(trades);
 });
+
+//get details for a particular trade.
+router.get("/history/:id", authMiddleware, (req,res) =>{
+  const {id } = req.params;
+  
+  const trade = db.prepare(`
+    SELECT * 
+    FROM trades
+    WHERE id = ?`).get(id);
+    
+    res.json(trade);
+})
 
 //get all running trades
 router.get("/running", authMiddleware, (req, res) => {

@@ -2,16 +2,15 @@ import React from 'react'
 import { useState } from 'react';
 import { formatDate } from '../utils/date';
 import { dollarAmount } from '../utils/dollarAmount';
-import TradeDetailsModal from './TradeDetailsModal';
+
+import { useNavigate } from 'react-router-dom';
 
 
 const TradeHistoryTable = ({trades}) => {
   
   const [selectedTrade, setSelectedTrade] = useState(null);
-  
-  
-  
-  
+  const navigate = useNavigate();
+
   
     return (
     <div className="overflow-x-auto rounded-lg border bg-white">
@@ -68,10 +67,7 @@ const TradeHistoryTable = ({trades}) => {
 
 
           {selectedTrade && (
-              <TradeDetailsModal
-                  trade={selectedTrade}
-                  onClose={() => setSelectedTrade(null)}
-              />
+              navigate(`/history/trade/${selectedTrade.id}`)
           )}
           </div>
 

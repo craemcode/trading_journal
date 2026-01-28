@@ -118,3 +118,10 @@ export async function getTradeHistory(page,limit){
     return res.json()
 }
 
+//trade history function 
+export async function getTradeDetails(tradeId){
+  const res = await fetchWithAuth(
+     `${API_BASE_URL}/trades/history/${tradeId}`
+  );
+  return res.json()
+}
