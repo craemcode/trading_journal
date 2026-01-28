@@ -36,7 +36,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      <Navbar />
+     
 
       <main className="mx-auto max-w-md px-6 py-24">
         <h2 className="text-2xl font-semibold">Create Account</h2>
